@@ -1,0 +1,17 @@
+{
+  "name": "08amazon",
+  "scripts": {
+    "start": "imba -w server.imba",
+    "build": "imba build server.imba"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase": "^8.10.0",
+    "imba": "^2.0.0-alpha.146"
+  },
+  "description": "",
+  "version": "1.0.0",
+  "homepage": "https://github.com//08amazon",
+  "author": "Author Name (https://github.com/)",
+  "license": "ISC"
+}
