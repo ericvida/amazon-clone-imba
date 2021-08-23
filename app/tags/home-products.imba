@@ -1,4 +1,5 @@
 import state from '../state'
+
 tag home-deals < div
 	css .main-section-deals
 		mt:5tw
@@ -19,10 +20,12 @@ tag home-deals < div
 				c:cooler4 fw:lighter
 			&.price
 				fw:medium c:cooler6 fs:large
+		
 	def mount
 		getProducts!
+
 	def getProducts
-		db.collection("products").get!.then! do(querySnapshot)
+		state.db.collection("products").get!.then! do(querySnapshot)
 			let products = []
 			querySnapshot.forEach! do(doc)
 				products.push!
@@ -33,8 +36,9 @@ tag home-deals < div
 					price: doc.data!.price
 					rating: doc.data!.rating
 			state.products = products
-			console.log 'got products'
-			imba.mount
+			console.log 'got products', state.products
+			imba.commit!
+
 	def render
 		<self.main-section-deals>
 			<h1[d:flex ai:center]>
@@ -52,7 +56,7 @@ tag home-deals < div
 						<div.product-section.rating>
 							<star-rating rating=item.rating>
 						<div.product-section.price>
-							"${item.price}"
+							"$", state.toDollars(item.price)
 						<button-add-cart.product-section item=item>
 
 tag button-add-cart < button
@@ -62,8 +66,9 @@ tag button-add-cart < button
 		p:2tw rd:md shadow:xs
 		c:amber9
 		w:100%
+
 	def addToCart item
-		let cartItem = db.collection("cart-items").doc(item.id)
+		let cartItem = state.db.collection("cart-items").doc(item.id)
 		cartItem.get().then! do(doc)
 			if doc.exists
 				cartItem.update!

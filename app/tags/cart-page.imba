@@ -1,6 +1,3 @@
-let counter = []
-import state from '../state'
-import db from '../api'
 import './cart-button-purchase'
 tag app-cart
 	css self
@@ -32,44 +29,46 @@ tag app-cart
 		.total-cost w:48tw d:flex ai:center fw:bold c:cooler5
 		.delete w:10tw d:flex ai:center 
 			svg fill:cooler3 @hover:red4
-	def mount
-		getCartItems!
-	def getCartItems itemID
-		db.collection("cart-items").onSnapshot! do(snapshot)
-			let cartItems = []
-			snapshot.docs.forEach! do(doc)
-				cartItems.push({
-					id: doc.id
-					image: doc.data!.image
-					make: doc.data!.make
-					name: doc.data!.name
-					price: doc.data!.price
-					quantity: doc.data!.quantity
-					rating: doc.data!.rating
-					})
-			state.cartItems = cartItems
+
 	def decreaseQty item
-		let cartItem = db.collection("cart-items").doc(item.id)
-		cartItem.get().then! do(doc)
-			if doc.exists
-				if doc.data!.quantity > 1
-					cartItem.update!
-						quantity: doc.data!.quantity - 1
-					item.quantity -= doc.data!.quantity - 1
+		let cartItem = state.db.collection("cart-items").doc(item.id)
+		let doc = await cartItem.get()
+
+		if doc.exists
+			let docdata = doc.data!
+			if docdata.quantity > 1
+				cartItem.update!
+					quantity: docdata.quantity - 1
+				item.quantity -= docdata.quantity - 1
+
+				const item_index = state.cartItems.indexOf(item)
+				state.cartItems[item_index] -= 1
+					
 		console.log "decrease to {item.quantity}"
-			
+		imba.commit!
+
 	def increaseQty item
-		let cartItem = db.collection("cart-items").doc(item.id)
-		cartItem.get().then! do(doc)
-			if doc.exists
-				if doc.data!.quantity > 0
-					cartItem.update!
-						quantity: doc.data!.quantity + 1
-					item.quantity += doc.data!.quantity + 1
+		let cartItem = state.db.collection("cart-items").doc(item.id)
+		let doc = await cartItem.get()
+
+		if doc.exists
+			let docdata = doc.data!
+			# if docdata.quantity > 1
+			cartItem.update!
+				quantity: docdata.quantity + 1
+			item.quantity -= docdata.quantity + 1
+
+			const item_index = state.cartItems.indexOf(item)
+			state.cartItems[item_index] += 1
+					
 		console.log "increase to {item.quantity}"
+		imba.commit!
+
 	def deleteCartItem item, i
 		db.collection("cart-items").doc(item.id).delete!
 		state.cartItems.splice(i, 1)
+		imba.commit!
+
 	def render
 		<self>
 			<h1> "Shopping Cart"
@@ -79,9 +78,9 @@ tag app-cart
 				<h2.total> "Total Cost"
 				<h2.delete>
 			<.cart-items>
-				let totalcost = 0
+				# let totalcost = 0
 				for item,i in state.cartItems
-					console.log 
+					# console.log 
 					<div.cart-item>
 						<.image>
 							<img src=item.image>
@@ -95,7 +94,7 @@ tag app-cart
 							<button.more @click=increaseQty(item)>
 								<svg.chevron-right xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/>
 						<.total-cost>
-							<span> "${item.price}"
+							<span> "${state.toDollars(item.price * item.quantity)}" # "${item.price * item.quantity}"
 						<.delete @click=deleteCartItem(item, i)>
 							<div.clickable>
 								<svg[w:4tw].times xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"/>

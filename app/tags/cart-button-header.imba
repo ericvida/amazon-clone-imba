@@ -8,15 +8,8 @@ tag cart-button
 		h:4tw w:4tw t:-1tw r:-1tw
 		d:flex jc:center ai:center pos: absolute
 		bg:white rd:full c:gray8 fs:xs
-	def mount
-		getCartCount!
-	def getCartCount
-		db.collection("cart-items").onSnapshot! do(snapshot)
-			let totalCount = 0
-			snapshot.docs.forEach! do(doc)
-				totalCount += doc.data!.quantity
-			state.cartCount = totalCount
-			imba.mount
+
+
 	def render
 		<self>
 			<a route-to="/cart">
