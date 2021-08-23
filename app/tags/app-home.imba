@@ -6,6 +6,6 @@ tag app-home < div
 		d:flex p:6tw bg:cooler1 fld:column fl:1
 	def render
 		<self.home-section>
-			<home-banner>
-			<home-categories>		
+			# <home-banner>
+			# <home-categories>		
 			<home-deals>

@@ -14,7 +14,7 @@ tag app
 		<self>
 			<app-header>
 			<div.main>
-				<app-sidebar>
+				# <app-sidebar>
 				<app-home route='/home'>
 				<app-cart route='/cart'>
 				
