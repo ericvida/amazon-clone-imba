@@ -8,4 +8,4 @@ tag app-home < div
 		<self.home-section>
 			# <home-banner>
 			# <home-categories>		
-			<home-deals>
+			<home-products>

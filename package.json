@@ -5,9 +5,13 @@
     "build": "imba build server.imba"
   },
   "dependencies": {
+    "@composi/are-equal": "^1.0.10",
+    "@toolz/local-storage": "^1.0.5",
+    "equal-checker": "^1.0.4",
     "express": "^4.17.1",
     "firebase": "^8.10.0",
-    "imba": "^2.0.0-alpha.146"
+    "imba": "^2.0.0-alpha.146",
+    "localforage": "^1.10.0"
   },
   "description": "",
   "version": "1.0.0",
