@@ -11,10 +11,7 @@ import './tags/page'
 tag shopping-app
 	css self d:block w:100% bg:cooler1 min-height:100vh
 	def setup
-		# state.clear!
 		state.firestoreInitialize!
-		# state.setAllItems(state.data)
-		# state.getAllItems(state.data)
 	def render
 		<self> 
 			<app-header>

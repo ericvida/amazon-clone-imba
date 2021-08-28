@@ -13,7 +13,7 @@ export tag orders-page < page
 		<self>
 			<h1> "Orders {state.data.order-count}"
 			<ul role="list">
-				for own id, order of state.data.orders
+				for own id, order of state.data.order-items
 					<li>
 						<h2> "{order.date}"
 						<h2> order.totalCost

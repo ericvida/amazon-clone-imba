@@ -25,8 +25,8 @@ export tag app-header < header
 				<.right>
 					css d:flex flg:1 jc:space-evenly ai:center
 						a c:white fw:bold fs:1.5rem td:none c:rose1 @hover:rose3 @active:amber3
-					<a route-to="/home"> "home"
+					<a route-to="/home"> "{state.data.product-count} products"
 					<cart-icon route-to="/cart">
-					<a route-to="/orders"> "orders"
+					<a route-to="/orders"> "{state.data.order-count} orders"
 			# <header-search>
 			# <header-right-icons>
